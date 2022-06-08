@@ -3,6 +3,12 @@
 
     <data>
         <variable
+            name="r"
+            type="com.example.common.entity.base_response.AppResponse" />
+        <import
+            alias="v"
+            type="android.view.View" />
+        <variable
             name="vm"
             type="com.example.themoviedbapplication.view_model.GenreMovieViewModel" />
     </data>
@@ -11,12 +17,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+<!--        <com.google.android.material.appbar.AppBarLayout-->
+<!--            android:id="@+id/appbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+<!--                    <com.google.android.material.appbar.MaterialToolbar-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:id="@+id/toolbar"-->
+<!--                        android:layout_height="wrap_content"/>-->
+<!--        </com.google.android.material.appbar.AppBarLayout>-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+           />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retry"
+            android:visibility="@{vm.data.state == r.ERROR?v.VISIBLE:v.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:fabSize="normal"
+            android:visibility="@{vm.data.state == r.ERROR?v.GONE:v.VISIBLE}"
+            android:src="@drawable/ic_next_svgrepo_com"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 
 

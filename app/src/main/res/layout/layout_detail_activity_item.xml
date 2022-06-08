@@ -2,6 +2,12 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="r"
+            type="com.example.common.entity.base_response.AppResponse" />
+        <import
+            alias="v"
+            type="android.view.View" />
 
         <import type="com.example.common.Constant" />
 
@@ -24,6 +30,7 @@
             android:id="@+id/video"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:visibility="@{vm.data.state == r.ERROR?v.GONE:v.VISIBLE}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,6 +75,7 @@
                 android:layout_below="@+id/overview"
                 android:layout_margin="8dp"
                 android:layout_toEndOf="@+id/image"
+                android:visibility="@{vm.data.state == r.ERROR?v.GONE:v.VISIBLE}"
                 android:text="@{String.format(`Genre : %s`, vm.data.data.genres[0].name)}"
                 android:textSize="16sp" />
 
@@ -78,6 +86,7 @@
                 android:layout_below="@+id/genre"
                 android:layout_margin="8dp"
                 android:layout_toEndOf="@+id/image"
+                android:visibility="@{vm.data.state == r.ERROR?v.GONE:v.VISIBLE}"
                 android:text="@{String.format(`Rating : %.2f`, vm.data.data.voteAverage)}"
                 android:textSize="16sp" />
 
@@ -88,6 +97,7 @@
                 android:layout_below="@+id/rating"
                 android:layout_margin="8dp"
                 android:layout_toEndOf="@+id/image"
+                android:visibility="@{vm.data.state == r.ERROR?v.GONE:v.VISIBLE}"
                 android:text="@{String.format(`Vote count: %d`, vm.data.data.voteCount)}"
                 android:textSize="16sp" />
 
@@ -100,5 +110,16 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@+id/relative"
             custom:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retry"
+            android:visibility="@{vm.data.state == r.ERROR?v.VISIBLE:v.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

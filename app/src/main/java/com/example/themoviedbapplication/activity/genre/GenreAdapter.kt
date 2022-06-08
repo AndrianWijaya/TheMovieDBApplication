@@ -1,18 +1,17 @@
 package com.example.themoviedbapplication.activity.genre
 
-import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.common.entity.genre.Genre
-import com.example.themoviedbapplication.activity.discover_movie.DiscoverMovieActivity
 import com.example.themoviedbapplication.databinding.LayoutGenreItemBinding
 
 class GenreAdapter(
-    val context: Context
+    val startSupportActionModeClick: (Genre) -> Unit,
+    val getSelection: () -> List<Genre>,
+    val toggleClick:(Genre)->Unit
 ) : RecyclerView.Adapter<GenreAdapterViewHolder>() {
     val differ = AsyncListDiffer<Genre>(this, itemCallback)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenreAdapterViewHolder {
@@ -26,11 +25,13 @@ class GenreAdapter(
     override fun onBindViewHolder(holder: GenreAdapterViewHolder, position: Int) {
         val data = differ.currentList[position]
         holder.binding.data = data
-        holder.binding.root.setOnClickListener() {
-            val genreId = data?.id
-            val intent = Intent(context, DiscoverMovieActivity::class.java)
-            intent.putExtra("EXTRA_DATA", genreId)
-            context.startActivity(intent)
+        holder.binding.isSelected = getSelection().contains(data)
+        holder.binding.root.setOnLongClickListener {
+            startSupportActionModeClick(data)
+            true
+        }
+        holder.binding.root.setOnClickListener {
+            toggleClick(data)
         }
     }
 
@@ -40,6 +41,42 @@ class GenreAdapter(
         data: List<Genre>
     ) {
         differ.submitList(data)
+    }
+
+    fun clearSelection(changes: (() -> Unit)?){
+
+        val toggleDiffUtil = object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = differ.currentList.size
+
+            override fun getNewListSize(): Int = differ.currentList.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = true
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return !getSelection().contains(differ.currentList[oldItemPosition])
+            }
+        }
+        val differ = DiffUtil.calculateDiff(toggleDiffUtil)
+        changes?.invoke()
+        differ.dispatchUpdatesTo(this)
+    }
+
+
+    fun toggleSelection(genre: Genre, changes: () -> Unit) {
+        val toggleDiffUtil = object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = differ.currentList.size
+
+            override fun getNewListSize(): Int = differ.currentList.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = true
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return differ.currentList[oldItemPosition] != genre
+            }
+        }
+        val differ = DiffUtil.calculateDiff(toggleDiffUtil)
+        changes()
+        differ.dispatchUpdatesTo(this)
     }
 
     companion object {

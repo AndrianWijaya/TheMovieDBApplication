@@ -10,13 +10,18 @@ import com.example.api_service.use_case.GetGenreUseCase
 import kotlinx.coroutines.launch
 
 class GenreMovieViewModel(
-    getGenreUseCase: GetGenreUseCase,
+   val getGenreUseCase: GetGenreUseCase,
     application: Application
 ) : BaseViewModule(application) {
 
     val data = MutableLiveData<AppResponse<List<Genre>>>()
+    val selection = MutableLiveData<List<Genre>>()
 
     init {
+        getGenre()
+    }
+
+    fun getGenre(){
         viewModelScope.launch {
             getGenreUseCase().collect{
                 data.postValue(it)

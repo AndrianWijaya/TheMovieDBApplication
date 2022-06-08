@@ -19,5 +19,6 @@ class DiscoverMovieActivity : BaseActivity<LayoutDiscoverActivityListBinding, Di
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observeLiveData()
+        initBinding()
     }
 }

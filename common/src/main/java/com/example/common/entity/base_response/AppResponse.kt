@@ -3,6 +3,7 @@ package com.example.common.entity.base_response
 import okhttp3.ResponseBody
 
 sealed class AppResponse<T>(
+    val state : Int = 2,
     val data : T?,
     val error: Exception?,
     val code : Int?,
@@ -15,6 +16,9 @@ sealed class AppResponse<T>(
         fun <T> errorBackend(statusCode : Int, body: ResponseBody?): AppResponse<T> =
             AppResponseError(null,statusCode,body)
         fun <T> loading(): AppResponse<T> = AppResponseLoading()
+        const val ERROR = 0
+        const val SUCCESS = 1
+        const val LOADING = 2
     }
 
 }
@@ -23,16 +27,16 @@ sealed class AppResponse<T>(
 
 class AppResponseSuccess<T>(
     data: T
-) : AppResponse<T>(data,null,null,null)
+) : AppResponse<T>(1,data,null,null,null)
 
 class AppResponseError<T>(
     exc: Exception?,
     code: Int?,
     responseBody: ResponseBody?
-) : AppResponse<T>(null,exc,code,responseBody){
+) : AppResponse<T>(0,null,exc,code,responseBody){
     companion object{
         const val ERROR_SYSTEM = -1
     }
 }
 
-class AppResponseLoading<T> : AppResponse<T>(null,null,null,null)
+class AppResponseLoading<T> : AppResponse<T>(2,null,null,null,null)

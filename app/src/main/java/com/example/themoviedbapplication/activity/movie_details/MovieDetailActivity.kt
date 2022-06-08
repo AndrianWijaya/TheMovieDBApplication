@@ -17,6 +17,7 @@ class MovieDetailActivity: BaseActivity<LayoutDetailActivityItemBinding, MovieDe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observeLiveData()
+        initBinding()
     }
 
 }

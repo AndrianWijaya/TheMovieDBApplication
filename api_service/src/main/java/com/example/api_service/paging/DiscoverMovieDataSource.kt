@@ -10,7 +10,7 @@ import com.example.common.entity.discover_movie.ResultDiscoverMovie
 
 class DiscoverMovieDataSource(
     private val discoverMovieService: DiscoverMovieService,
-    val genre: Int
+    val genre: ArrayList<Int>
 ) : PagingSource<Int, ResultDiscoverMovie>() {
     override fun getRefreshKey(state: PagingState<Int, ResultDiscoverMovie>): Int? = null
 
@@ -40,7 +40,7 @@ class DiscoverMovieDataSource(
         fun createPager(
             pageSize : Int,
             discoverMovieService: DiscoverMovieService,
-            genre: Int
+            genre: ArrayList<Int>
         ) = Pager<Int, ResultDiscoverMovie>(
             PagingConfig(pageSize), null
         ){
